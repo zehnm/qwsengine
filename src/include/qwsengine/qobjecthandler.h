@@ -33,13 +33,13 @@ class Connection;
 class QObjectHandlerPrivate;
 
 /**
- * @brief %Handler for invoking slots
+ * @brief %Handler for invoking slots for received messages based on message names.
  *
  * This handler enables incoming requests to be processed by slots in a
  * QObject-derived class or functor. Methods are registered by providing a
  * name and slot to invoke. The slot must take a pointer to the
- * [Socket](@ref QWsEngine::Socket) for the request as an argument and
- * must also close the socket when finished with it.
+ * [Connection](@ref QWsEngine::Connection) for the request as an argument and
+ * must also close the connection when finished with it.
  *
  * To use this class, simply create an instance and call the appropriate
  * registerMessage() overload. For example:
@@ -49,13 +49,13 @@ class QObjectHandlerPrivate;
  * {
  *     Q_OBJECT
  * public slots:
- *     void something(QWsEngine::Socket *socket);
+ *     void something(QWsEngine::Connection *connection);
  * };
  *
  * QWsEngine::QObjectHandler handler;
  * Object object;
  * // Old connection syntax
- * handler.registerMessage("something", &object, SLOT(something(QWsEngine::Socket*)));
+ * handler.registerMessage("something", &object, SLOT(something(QWsEngine::Connection*)));
  * // New connection syntax
  * handler.registerMessage("something", &object, &Object::something);
  * @endcode
@@ -65,9 +65,9 @@ class QObjectHandlerPrivate;
  *
  * @code
  * QWsEngine::QObjectHandler handler;
- * handler.registerMessage("something", [](QWsEngine::Socket *socket) {
+ * handler.registerMessage("something", [](QWsEngine::Connection *connection) {
  *     // do something
- *     socket->close();
+ *     connection->close();
  * });
  * @endcode
  */

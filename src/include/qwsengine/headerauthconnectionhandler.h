@@ -59,7 +59,7 @@ class HeaderAuthConnectionHandler : public ConnectionHandler {
 
  protected:
     /**
-     * @brief Reimplementation of [ConnectionHandler::process()](WsEngine::ConnectionHandler::process)
+     * @brief Reimplementation of [ConnectionHandler::process()](QWsEngine::ConnectionHandler::process)
      */
     Connection *process(QWebSocket *socket, const QString &path) override;
 

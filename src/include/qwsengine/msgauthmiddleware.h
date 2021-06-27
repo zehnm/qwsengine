@@ -14,10 +14,7 @@ class Connection;
 class MsgAuthMiddlewarePrivate;
 
 /**
- * @brief Pre-handler request message processor.
- *
- * Middleware sits between the connection handler and the final endpoint connection handler,
- * determining whether the message should be passed on to the handler.
+ * @brief %Middleware for token based authentication in a JSON message.
  */
 class QWSENGINE_EXPORT MsgAuthMiddleware : public Middleware {
     Q_OBJECT
@@ -53,13 +50,6 @@ class QWSENGINE_EXPORT MsgAuthMiddleware : public Middleware {
     void setFailedAuthClosesSocket(bool close);
     bool isFailedAuthClosesSocket() const;
 
-    /**
-     * @brief Determine if request processing should continue
-     *
-     * This method is invoked when a new request comes in. If true is
-     * returned, processing continues. Otherwise, it is assumed that an
-     * appropriate error was written to the socket.
-     */
     bool process(Connection *connection, const QString &msgName, const QVariant &message) override;
 
  private:

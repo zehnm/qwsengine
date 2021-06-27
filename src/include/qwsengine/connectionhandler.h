@@ -19,7 +19,7 @@ class Handler;
 /**
  * @brief Base class for WebSocket connection handlers
  *
- * When a new connection is established by a [Server](@ref WsEngine::Server), it
+ * When a new connection is established by a [Server](@ref QWsEngine::Server), it
  * invokes the route() method of the root handler which is used to determine
  * what happens to the connection request. All WebSocket handlers derive from this class
  * should override the protected process() method in order to process the request.
@@ -29,7 +29,7 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
 
  public:
     /**
-     * @brief Base constructor for a handler
+     * @brief Base constructor for a connection handler
      */
     explicit ConnectionHandler(QObject *parent = 0);
     explicit ConnectionHandler(Handler *handler, QObject *parent = 0);
@@ -41,7 +41,7 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
     virtual QString name() const;
 
     /**
-     * @brief Add middleware to the handler
+     * @brief Add connection middleware to the handler
      */
     void addMiddleware(ConnectionMiddleware *middleware);
 
@@ -49,7 +49,7 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
      * @brief Add a handler
      *
      * The handler will be added to an internal list that will be
-     * used when the route() method is invoked, after the middleware has been processed.
+     * used when the route() method is invoked, after the connection middleware has been processed.
      * If the sub handler returns a Connection, further processing is stopped and the connection returned to the caller.
      * The order of the list is preserved.
      */
@@ -71,7 +71,7 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
      * @brief Process a new connection
      *
      * This method should process the connection either by fulfilling it and returning a new [Connection](@ref
-     * WsEngine::Connection), or if the connection is rejected returning nullptr and deleting the socket after writing
+     * QWsEngine::Connection), or if the connection is rejected returning nullptr and deleting the socket after writing
      * an error to the socket and closing it.
      */
     virtual Connection *process(QWebSocket *socket, const QString &path);

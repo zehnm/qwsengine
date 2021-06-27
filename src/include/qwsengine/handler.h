@@ -20,7 +20,7 @@ class HandlerPrivate;
 /**
  * @brief Base class for WebSocket message handlers
  *
- * When a message is received by a [ConnectionHandler](@ref WsEngine::ConnectionHandler), it
+ * When a message is received by a [ConnectionHandler](@ref QWsEngine::ConnectionHandler), it
  * invokes the route() method of the root handler which is used to determine
  * what happens to the message. All WebSocket handlers derive from this class
  * should override the protected process() method in order to process the message.
@@ -30,14 +30,14 @@ class QWSENGINE_EXPORT Handler : public QObject {
 
  public:
     /**
-     * @brief Base constructor for a handler
+     * @brief Base constructor for a message handler
      */
     explicit Handler(QObject *parent = nullptr);
 
     virtual ~Handler();
 
     /**
-     * @brief Add middleware to the handler
+     * @brief Add mesasge middleware to the handler
      */
     void addMiddleware(Middleware *middleware);
 

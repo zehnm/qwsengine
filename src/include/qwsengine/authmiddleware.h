@@ -13,17 +13,18 @@ class Connection;
 class AuthMiddlewarePrivate;
 
 /**
- * @brief Pre-handler request message processor.
+ * @brief %Middleware for checking if the connection is authenticated.
  *
- * Middleware sits between the connection handler and the final endpoint connection handler,
- * determining whether the message should be passed on to the handler.
+ * The authentication middleware blocks all requests as long as the
+ * corresponding connection hasn't been authenticated yet.
+ * The authentication itself is not part of the middleware.
  */
 class QWSENGINE_EXPORT AuthMiddleware : public Middleware {
     Q_OBJECT
 
  public:
     /**
-     * @brief Base constructor for middleware
+     * @brief Base constructor for the middleware
      */
     explicit AuthMiddleware(QObject *parent = nullptr);
 
@@ -35,11 +36,10 @@ class QWSENGINE_EXPORT AuthMiddleware : public Middleware {
     QString name() const override;
 
     /**
-     * @brief Determine if request processing should continue
+     * @brief Check if the connection has been authenticated.
      *
-     * This method is invoked when a new request comes in. If true is
-     * returned, processing continues. Otherwise, it is assumed that an
-     * appropriate error was written to the socket.
+     * An error message with code 401 "Authentication required" is sent to the
+     * client if the corresponding %Connection is not yet authenticated.
      */
     bool process(Connection *connection, const QString &msgName, const QVariant &message) override;
 

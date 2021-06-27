@@ -28,7 +28,7 @@ class QWSENGINE_EXPORT ConnectionMiddleware : public QObject {
 
  public:
     /**
-     * @brief Base constructor for middleware
+     * @brief Base constructor for connection middleware
      */
     explicit ConnectionMiddleware(QObject *parent = nullptr) : QObject(parent) {}
 
@@ -43,7 +43,7 @@ class QWSENGINE_EXPORT ConnectionMiddleware : public QObject {
      * This method is invoked when a new connection is established. If true is
      * returned, processing continues. Otherwise, it is assumed that an
      * appropriate error was written to the socket and that the socket has been closed.
-     * The socket will be deleted by the [ConnectionHandler](@ref WsEngine::ConnectionHandler).
+     * The socket will be deleted by the [ConnectionHandler](@ref QWsEngine::ConnectionHandler).
      */
     virtual bool process(QWebSocket *socket) = 0;
 };
