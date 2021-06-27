@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Copyright 2021 Markus Zehnder
+
+#pragma once
+
+#include <QtCore/qglobal.h>
+
+#define QWSENGINE_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define QWSENGINE_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define QWSENGINE_VERSION_PATCH @PROJECT_VERSION_PATCH@
+#define QWSENGINE_VERSION       "@PROJECT_VERSION@"
+
+#cmakedefine BUILD_SHARED_LIBS
+
+#if defined(BUILD_SHARED_LIBS)
+#  if defined(QWSENGINE_LIBRARY)
+#    define QWSENGINE_EXPORT Q_DECL_EXPORT
+#  else
+#    define QWSENGINE_EXPORT Q_DECL_IMPORT
+#  endif
+#else
+#  define QWSENGINE_EXPORT
+#endif

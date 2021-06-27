@@ -1,3 +1,13 @@
+# General
+.DS_Store
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
 # C++ objects and libs
 *.slo
 *.lo
@@ -28,6 +38,7 @@ ui_*.h
 *.qmlc
 *.jsc
 Makefile*
+build
 *build-*
 *.qm
 *.prl
