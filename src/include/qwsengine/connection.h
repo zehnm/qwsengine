@@ -4,9 +4,11 @@
 #pragma once
 
 #include <QByteArray>
+#include <QEnableSharedFromThis>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
+#include <QScopedPointer>
 #include <QString>
 #include <QtWebSockets/QWebSocket>
 
@@ -20,8 +22,10 @@ class ConnectionPrivate;
 
 /**
  * @brief Each client connection is represented in a Connection instance, managed by ConnectionHandler.
+ *
+ * The Connection takes ownership of the provided QWebSocket object.
  */
-class QWSENGINE_EXPORT Connection : public QObject {
+class QWSENGINE_EXPORT Connection : public QObject, public QEnableSharedFromThis<QWsEngine::Connection> {
     Q_OBJECT
 
  public:
@@ -46,7 +50,7 @@ class QWSENGINE_EXPORT Connection : public QObject {
     qint64 sendTextMessage(const QString &message);
     qint64 sendBinaryMessage(const QByteArray &data);
 
- public Q_SLOTS: // NOLINT
+ public Q_SLOTS:  // NOLINT
     void processTextMessage(const QString &message);
     void processBinaryMessage(const QByteArray &message);
 
@@ -54,7 +58,7 @@ class QWSENGINE_EXPORT Connection : public QObject {
                const QString &               reason = QString());
 
  private:
-    ConnectionPrivate *const d;
+    QScopedPointer<ConnectionPrivate> const d;
     friend class ConnectionPrivate;
 };
 

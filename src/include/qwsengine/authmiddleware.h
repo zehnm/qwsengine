@@ -41,7 +41,7 @@ class QWSENGINE_EXPORT AuthMiddleware : public Middleware {
      * An error message with code 401 "Authentication required" is sent to the
      * client if the corresponding %Connection is not yet authenticated.
      */
-    bool process(Connection *connection, const QString &msgName, const QVariant &message) override;
+    bool process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) override;
 
  private:
     AuthMiddlewarePrivate *const d;

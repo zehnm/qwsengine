@@ -36,7 +36,7 @@ void ConnectionHandler::addSubHandler(const QRegExp &pattern, ConnectionHandler 
     d->subHandlers.append(ConnSubHandler(pattern, handler));
 }
 
-Connection *ConnectionHandler::route(QWebSocket *socket, const QString &path) {
+QSharedPointer<Connection> ConnectionHandler::route(QWebSocket *socket, const QString &path) {
     qCDebug(wsEngine) << name() << ": Routing new" << path
                       << "connection through the middleware from:" << socket->peerAddress().toString()
                       << socket->peerPort();
@@ -75,7 +75,7 @@ Handler *ConnectionHandler::messageHandler() {
     return d->handler;
 }
 
-Connection *ConnectionHandler::process(QWebSocket *socket, const QString &path) {
+QSharedPointer<Connection> ConnectionHandler::process(QWebSocket *socket, const QString &path) {
     if (d->handler) {
         // simple connection without authentication: therefore set connection as authenticated to allow message
         // processing
@@ -92,8 +92,8 @@ Connection *ConnectionHandler::process(QWebSocket *socket, const QString &path) 
     return nullptr;
 }
 
-Connection *ConnectionHandler::createConnection(QWebSocket *socket, bool authenticated) {
-    return new Connection(socket, d->handler, authenticated);
+QSharedPointer<Connection> ConnectionHandler::createConnection(QWebSocket *socket, bool authenticated) {
+    return QSharedPointer<Connection>::create(socket, d->handler, authenticated);
 }
 
 }  // namespace QWsEngine

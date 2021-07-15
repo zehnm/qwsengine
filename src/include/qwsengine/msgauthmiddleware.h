@@ -6,6 +6,8 @@
 #include <qwsengine/middleware.h>
 #include <qwsengine/tokenauthenticator.h>
 
+#include <QSharedPointer>
+
 #include "qwsengine_export.h"
 
 namespace QWsEngine {
@@ -50,7 +52,7 @@ class QWSENGINE_EXPORT MsgAuthMiddleware : public Middleware {
     void setFailedAuthClosesSocket(bool close);
     bool isFailedAuthClosesSocket() const;
 
-    bool process(Connection *connection, const QString &msgName, const QVariant &message) override;
+    bool process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) override;
 
  private:
     MsgAuthMiddlewarePrivate *const d;

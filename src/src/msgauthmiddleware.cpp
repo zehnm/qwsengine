@@ -59,7 +59,8 @@ bool MsgAuthMiddleware::isFailedAuthClosesSocket() const {
     return d->failedAuthClosesSocket;
 }
 
-bool MsgAuthMiddleware::process(Connection *connection, const QString &msgName, const QVariant &message) {
+bool MsgAuthMiddleware::process(QSharedPointer<Connection> connection, const QString &msgName,
+                                const QVariant &message) {
     if (message.type() != QMetaType::QJsonObject) {
         // not a json object message, continue.
         qCWarning(wsEngine()) << "Expected QJsonObject message but got:" << message.typeName();

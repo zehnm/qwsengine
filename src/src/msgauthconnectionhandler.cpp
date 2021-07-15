@@ -5,6 +5,7 @@
 
 #include <QNetworkRequest>
 #include <QTimer>
+#include <QWeakPointer>
 
 #include "connection_p.h"
 #include "msgauthconnectionhandler_p.h"
@@ -39,13 +40,22 @@ bool MsgAuthConnectionHandler::isFailedAuthClosesConnection() const {
     return d->failedAuthClosesConnection;
 }
 
-Connection *MsgAuthConnectionHandler::createConnection(QWebSocket *socket, bool authenticated) {
+QSharedPointer<Connection> MsgAuthConnectionHandler::createConnection(QWebSocket *socket, bool authenticated) {
     Q_UNUSED(authenticated)
 
-    auto conn = new Connection(socket, messageHandler(), false);
+    auto conn = QSharedPointer<Connection>::create(socket, messageHandler(), false);
     conn->sendAuthRequired();
 
-    QTimer::singleShot(d->authTimeoutMs, conn, [conn] {
+    qCDebug(wsEngine) << "Created new Connection for:" << socket->peerAddress().toString();
+    // Don't hold a strong reference to the connection: the client might disconnect before the timeout.
+    // If there's still a strong reference the connection object won't be deleted
+    QWeakPointer<Connection> weakConn = conn.toWeakRef();
+    QTimer::singleShot(d->authTimeoutMs, conn.data(), [weakConn] {
+        if (weakConn.isNull()) {
+            return;
+        }
+        qCDebug(wsEngine) << "Authentication timeout, checking state";
+        auto conn = weakConn.toStrongRef();
         if (!conn->isAuthenticated()) {
             conn->sendErrorResponse(408, "Closing connection after authentication timeout");
             conn->close(QWebSocketProtocol::CloseCodePolicyViolated, "Authentication timeout");

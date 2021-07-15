@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QRegExp>
+#include <QSharedPointer>
 #include <QtWebSockets/QWebSocket>
 
 #include "qwsengine_export.h"
@@ -58,7 +59,7 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
     /**
      * @brief Route an incoming connection
      */
-    Connection *route(QWebSocket *socket, const QString &path);
+    QSharedPointer<QWsEngine::Connection> route(QWebSocket *socket, const QString &path);
 
     /**
      * @brief Set the root message handler for the created connections
@@ -74,14 +75,14 @@ class QWSENGINE_EXPORT ConnectionHandler : public QObject {
      * QWsEngine::Connection), or if the connection is rejected returning nullptr and deleting the socket after writing
      * an error to the socket and closing it.
      */
-    virtual Connection *process(QWebSocket *socket, const QString &path);
+    virtual QSharedPointer<QWsEngine::Connection> process(QWebSocket *socket, const QString &path);
 
     /**
      * @brief Connection creation hook.
      *
      * Override to create custom connections.
      */
-    virtual Connection *createConnection(QWebSocket *socket, bool authenticated = false);
+    virtual QSharedPointer<QWsEngine::Connection> createConnection(QWebSocket *socket, bool authenticated = false);
 
  private:
     ConnectionHandlerPrivate *const d;

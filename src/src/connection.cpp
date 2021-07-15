@@ -10,11 +10,17 @@
 namespace QWsEngine {
 
 ConnectionPrivate::ConnectionPrivate(Connection *connection, QWebSocket *webSocket)
-    : QObject(connection), socket(webSocket), handler(nullptr), authenticated(false), q(connection) {
+    : socket(webSocket), handler(nullptr), authenticated(false), q(connection) {
     Q_ASSERT(webSocket);
 
     connect(webSocket, &QWebSocket::textMessageReceived, q, &Connection::processTextMessage);
     connect(webSocket, &QWebSocket::binaryMessageReceived, q, &Connection::processBinaryMessage);
+}
+
+ConnectionPrivate::~ConnectionPrivate() {
+    qCDebug(wsEngine) << "ConnectionPrivate destructor";
+    // socket may not be deleted immediately if triggered from QWebSocketServer::socketDisconnected
+    socket->deleteLater();
 }
 
 Connection::Connection(QWebSocket *webSocket, bool authenticated) : d(new ConnectionPrivate(this, webSocket)) {
@@ -28,7 +34,7 @@ Connection::Connection(QWebSocket *webSocket, Handler *handler, bool authenticat
 }
 
 Connection::~Connection() {
-    qCDebug(wsEngine) << "Connection deconstructor";
+    qCDebug(wsEngine) << "Connection destructor";
 }
 
 void Connection::setHandler(Handler *handler) {
@@ -53,7 +59,7 @@ void Connection::setAuthenticated(bool authenticated) {
 
 void Connection::processTextMessage(const QString &message) {
     if (d->handler) {
-        d->handler->routeTextMessage(this, message);
+        d->handler->routeTextMessage(sharedFromThis(), message);
     } else {
         sendErrorResponse(500, "No message handler defined");
     }
@@ -61,7 +67,7 @@ void Connection::processTextMessage(const QString &message) {
 
 void Connection::processBinaryMessage(const QByteArray &message) {
     if (d->handler) {
-        d->handler->routeBinaryMessage(this, message);
+        d->handler->routeBinaryMessage(sharedFromThis(), message);
     } else {
         sendErrorResponse(500, "No message handler defined");
     }

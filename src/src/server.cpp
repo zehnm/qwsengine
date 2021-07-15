@@ -35,7 +35,7 @@ void ServerPrivate::onNewConnection() {
         if (conn) {
             qCDebug(wsEngine) << "Created new" << path << "client connection from:" << socket->peerAddress().toString()
                               << socket->peerPort();
-            connect(this, &ServerPrivate::disconnectAllClients, conn, &Connection::close);
+            connect(this, &ServerPrivate::disconnectAllClients, conn.data(), &Connection::close);
 
             connect(socket, &QWebSocket::disconnected, this, &ServerPrivate::socketDisconnected);
             connections.insert(socket, conn);
@@ -50,17 +50,14 @@ void ServerPrivate::onNewConnection() {
 
 void ServerPrivate::socketDisconnected() {
     QWebSocket *socket = qobject_cast<QWebSocket *>(sender());
-    if (socket) {
-        qCDebug(wsEngine) << "Client disconnected:" << socket->peerAddress().toString() << socket->peerPort();
-        if (connections.contains(socket)) {
-            qCDebug(wsEngine) << "Deleting connection";
-            auto *conn = connections.take(socket);
-            //            emit clientDisconnected(conn->clientInfo());
-            conn->deleteLater();
-        }
-        socket->close();  // TODO(zehnm) really required?
-        socket->deleteLater();
+    if (!(socket && connections.contains(socket))) {
+        return;
     }
+    qCDebug(wsEngine) << "Client disconnected, releasing connection:" << socket->peerAddress().toString()
+                      << socket->peerPort();
+    auto conn = connections.take(socket);
+    // as soon as the last reference is released, the Connection object will be deleted including QWebSocket!
+    conn.clear();
 }
 
 void ServerPrivate::onServerClosed() {

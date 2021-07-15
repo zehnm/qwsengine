@@ -16,6 +16,7 @@ class ConnectionPrivate : public QObject {
 
  public:
     explicit ConnectionPrivate(Connection *connection, QWebSocket *socket);
+    virtual ~ConnectionPrivate();
 
     QList<Middleware *> middleware;
 

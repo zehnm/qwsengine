@@ -61,7 +61,7 @@ class HeaderAuthConnectionHandler : public ConnectionHandler {
     /**
      * @brief Reimplementation of [ConnectionHandler::process()](QWsEngine::ConnectionHandler::process)
      */
-    Connection *process(QWebSocket *socket, const QString &path) override;
+    QSharedPointer<Connection> process(QWebSocket *socket, const QString &path) override;
 
  private:
     HeaderAuthConnectionHandlerPrivate *const d;

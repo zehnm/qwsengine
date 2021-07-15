@@ -43,7 +43,7 @@ QString Handler::authRequiredMsgTemplate() const {
     return d->authTemplate;
 }
 
-void Handler::routeTextMessage(Connection *connection, const QString &message) {
+void Handler::routeTextMessage(QSharedPointer<Connection> connection, const QString &message) {
     qCDebug(wsEngine()) << "Converting WebSocket text message to JSON object";
 
     // TODO(zehnm) replace with MessageConverter
@@ -61,17 +61,17 @@ void Handler::routeTextMessage(Connection *connection, const QString &message) {
         return;
     }
     QJsonObject jsonObject = doc.object();
-    // TODO(zehnm) refactor to user settable MessageNameExctractor class
+    // TODO(zehnm) refactor to user settable MessageNameExtractor class
     QVariant test = QVariant(jsonObject);
     route(connection, jsonObject.value("type").toString(), test);
 }
 
-void Handler::routeBinaryMessage(Connection *connection, const QByteArray &message) {
+void Handler::routeBinaryMessage(QSharedPointer<Connection> connection, const QByteArray &message) {
     // TODO(zehnm) add MessageConverter
     route(connection, "binary", message);
 }
 
-void Handler::route(Connection *connection, const QString &msgName, const QVariant &message) {
+void Handler::route(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) {
     // Run through each of the middleware
     foreach(Middleware *middleware, d->middleware) {
         if (!middleware->process(connection, msgName, message)) {
@@ -91,7 +91,7 @@ void Handler::route(Connection *connection, const QString &msgName, const QVaria
     process(connection, msgName, message);
 }
 
-void Handler::process(Connection *connection, const QString &msgName, const QVariant &message) {
+void Handler::process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) {
     Q_UNUSED(msgName)
     Q_UNUSED(message)
     if (connection->isAuthenticated()) {
