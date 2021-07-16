@@ -12,18 +12,28 @@ namespace QWsEngine {
 class ConnectionHandler;
 class ServerPrivate;
 
+/**
+ * @brief WebSocket server extending Qt's QWebSocketServer for convenient JSON payload handling in text messages.
+ *
+ * The QWebSocket instance retrieved for new client connections is managed by QWsEngine::Connection, which in turn is
+ * passed around with a QSharedPointer. The server keeps track of all open QWebSocket instances. The QWebSocket's
+ * disconnect() signal is used to ensure that the connection and socket objects are deleted when the client disconnects.
+ */
 class QWSENGINE_EXPORT Server : public QWebSocketServer {
     Q_OBJECT
 
  public:
     /**
-     * @brief Create a WebSocket server
+     * @brief Constructs a new WebSocket server.
+     *
+     * Simply calls the corresponding QWebSocketServer constructor.
+     * The method setHandler must be called separately to initialize and use the server.
      */
     explicit Server(const QString &serverName = QString(), SslMode secureMode = QWebSocketServer::NonSecureMode,
                     QObject *parent = nullptr);
 
     /**
-     * @brief Create a WebSocket server with the specified connection handler
+     * @brief Constructs a new WebSocket server with the specified connection handler.
      */
     Server(ConnectionHandler *handler, const QString &serverName = QString(),
            SslMode secureMode = QWebSocketServer::NonSecureMode, QObject *parent = nullptr);
@@ -31,7 +41,7 @@ class QWSENGINE_EXPORT Server : public QWebSocketServer {
     virtual ~Server();
 
     /**
-     * @brief Set the root connection handler for all new requests
+     * @brief Set the root connection handler for all new requests.
      */
     void setHandler(ConnectionHandler *handler);
 

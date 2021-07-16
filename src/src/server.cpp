@@ -31,6 +31,8 @@ void ServerPrivate::onNewConnection() {
     QString path = socket->requestUrl().path();
 
     if (handler) {
+        // The QWebSocket is now managed by the Connection.
+        // If the connection routing fails, it will be closed and disposed with deleteLater().
         auto conn = handler->route(socket, path);
         if (conn) {
             qCDebug(wsEngine) << "Created new" << path << "client connection from:" << socket->peerAddress().toString()

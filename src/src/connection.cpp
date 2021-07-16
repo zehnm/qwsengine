@@ -19,6 +19,7 @@ ConnectionPrivate::ConnectionPrivate(Connection *connection, QWebSocket *webSock
 
 ConnectionPrivate::~ConnectionPrivate() {
     qCDebug(wsEngine) << "ConnectionPrivate destructor";
+    socket->close();
     // socket may not be deleted immediately if triggered from QWebSocketServer::socketDisconnected
     socket->deleteLater();
 }
