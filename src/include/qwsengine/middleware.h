@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSharedPointer>
 #include <QVariant>
 #include <QtWebSockets/QWebSocket>
 
@@ -42,7 +43,7 @@ class QWSENGINE_EXPORT Middleware : public QObject {
      * returned, processing continues. Otherwise, it is assumed that an
      * appropriate error was written to the socket.
      */
-    virtual bool process(Connection *connection, const QString &msgName, const QVariant &message) = 0;
+    virtual bool process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) = 0;
 };
 
 }  // namespace QWsEngine

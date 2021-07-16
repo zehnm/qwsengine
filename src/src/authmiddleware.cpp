@@ -8,8 +8,7 @@
 
 namespace QWsEngine {
 
-AuthMiddlewarePrivate::AuthMiddlewarePrivate(AuthMiddleware *middleware)
-    : QObject(middleware), q(middleware) {}
+AuthMiddlewarePrivate::AuthMiddlewarePrivate(AuthMiddleware *middleware) : QObject(middleware), q(middleware) {}
 
 AuthMiddleware::AuthMiddleware(QObject *parent) : Middleware(parent), d(new AuthMiddlewarePrivate(this)) {}
 
@@ -19,8 +18,7 @@ QString AuthMiddleware::name() const {
     return "AuthCheck";
 }
 
-bool AuthMiddleware::process(Connection *connection, const QString &msgName,
-                                       const QVariant &message) {
+bool AuthMiddleware::process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) {
     Q_UNUSED(message)
 
     if (!connection->isAuthenticated()) {

@@ -28,4 +28,4 @@ Open issues and TODOs:
 - [ ] Provide examples
 - [ ] Documentation
 - [ ] Test suite
-- [ ] Investigate smart pointers instead of passing raw pointers around
+- [X] Investigate smart pointers instead of passing raw pointers around

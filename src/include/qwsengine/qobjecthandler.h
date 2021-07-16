@@ -55,7 +55,7 @@ class QObjectHandlerPrivate;
  * QWsEngine::QObjectHandler handler;
  * Object object;
  * // Old connection syntax
- * handler.registerMessage("something", &object, SLOT(something(QWsEngine::Connection*)));
+ * handler.registerMessage("something", &object, SLOT(something(QSharedPointer<QWsEngine::Connection>)));
  * // New connection syntax
  * handler.registerMessage("something", &object, &Object::something);
  * @endcode
@@ -65,7 +65,7 @@ class QObjectHandlerPrivate;
  *
  * @code
  * QWsEngine::QObjectHandler handler;
- * handler.registerMessage("something", [](QWsEngine::Connection *connection) {
+ * handler.registerMessage("something", [](QSharedPointer<QWsEngine::Connection> connection) {
  *     // do something
  *     connection->close();
  * });
@@ -153,7 +153,7 @@ class QWSENGINE_EXPORT QObjectHandler : public Handler {
     /**
      * @brief Reimplementation of [Handler::process()](QWsEngine::Handler::process)
      */
-    void process(Connection *connection, const QString &msgName, const QVariant &message) override;
+    void process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message) override;
 
  private:
     template <typename Func1, typename Func1Operator>

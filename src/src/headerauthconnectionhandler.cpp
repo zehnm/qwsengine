@@ -68,7 +68,7 @@ bool HeaderAuthConnectionHandler::isFailedAuthCreatesConnection() const {
     return d->failedAuthCreatesConnection;
 }
 
-Connection *HeaderAuthConnectionHandler::process(QWebSocket *socket, const QString &path) {
+QSharedPointer<Connection> HeaderAuthConnectionHandler::process(QWebSocket *socket, const QString &path) {
     auto networkRequest = socket->request();
     auto headerName = d->tokenHeaderName.toUtf8();
     bool authenticated = false;

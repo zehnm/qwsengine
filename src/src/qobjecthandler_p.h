@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QObject>
 #include <QRegExp>
+#include <QSharedPointer>
 
 namespace QWsEngine {
 
@@ -58,7 +59,7 @@ class QObjectHandlerPrivate : public QObject {
         } slot;
     };
 
-    void invokeSlot(Connection *socket, const QVariant &message, Method m);
+    void invokeSlot(QSharedPointer<QWsEngine::Connection> connection, const QVariant &message, Method m);
 
     QMap<QString, Method> map;
 

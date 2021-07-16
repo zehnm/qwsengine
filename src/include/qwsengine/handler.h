@@ -5,6 +5,7 @@
 
 #include <QByteArray>
 #include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QVariant>
 #include <QtWebSockets/QWebSocket>
@@ -58,14 +59,14 @@ class QWSENGINE_EXPORT Handler : public QObject {
     void    setAuthRequiredMsgTemplate(const QString &messageTemplate);
     QString authRequiredMsgTemplate() const;
 
-    virtual void routeTextMessage(Connection *connection, const QString &message);
-    virtual void routeBinaryMessage(Connection *connection, const QByteArray &message);
+    virtual void routeTextMessage(QSharedPointer<Connection> connection, const QString &message);
+    virtual void routeBinaryMessage(QSharedPointer<Connection> connection, const QByteArray &message);
 
  protected:
     /**
      * @brief Route an incoming message
      */
-    void route(Connection *connection, const QString &msgName, const QVariant &message);
+    void route(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message);
 
     /**
      * @brief Process a message
@@ -73,7 +74,7 @@ class QWSENGINE_EXPORT Handler : public QObject {
      * This method should process the message either by fulfilling it, or
      * writing an error to the socket.
      */
-    virtual void process(Connection *connection, const QString &msgName, const QVariant &message);
+    virtual void process(QSharedPointer<Connection> connection, const QString &msgName, const QVariant &message);
 
  private:
     HandlerPrivate *const d;

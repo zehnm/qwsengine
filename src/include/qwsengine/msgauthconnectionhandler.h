@@ -36,7 +36,7 @@ class QWSENGINE_EXPORT MsgAuthConnectionHandler : public ConnectionHandler {
     virtual bool isFailedAuthClosesConnection() const;
 
  protected:
-    Connection *createConnection(QWebSocket *socket, bool authenticated = false) override;
+    QSharedPointer<Connection> createConnection(QWebSocket *socket, bool authenticated = false) override;
 
  private:
     MsgAuthConnectionHandlerPrivate *const d;
